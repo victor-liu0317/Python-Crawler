@@ -15,3 +15,20 @@ bsObj = BeautifulSoup(html, "html.parser")
 for link in bsObj.findAll("a", href=re.compile("[A-Za-z0-9\.]*uir\.cn")):
         if 'href' in link.attrs:    # 使用tag.attrs获取属性，返回的是字典对象
             print(link.attrs['href'])
+
+
+import urllib.request
+import json
+phonenumber = input("Please input your phonenumber:\n")
+url = 'http://apis.baidu.com/apistore/mobilenumber/mobilenumber?phone=' + phonenumber
+# 使用百度api查询号码归属地
+req = urllib.request.Request(url)
+
+req.add_header("apikey", "4c5c7b17eaa22305f3c9a42379ecf822")
+
+resp = urllib.request.urlopen(req)
+content = resp.read().decode('unicode-escape')
+jsonObj = json.loads(content)
+if content:
+    print(jsonObj.get('retData').get('phone')+' '+jsonObj.get('retData').get('supplier') + ' ' +
+          jsonObj.get('retData').get('province')+' '+jsonObj.get('retData').get('city'))
