@@ -1,0 +1,17 @@
+from urllib.request import urlopen
+from bs4 import BeautifulSoup
+html = urlopen("http://www.baidu.com")
+bsObj = BeautifulSoup(html.read(), "html.parser")
+print(bsObj.img)
+
+
+
+from urllib.request import urlopen
+from bs4 import BeautifulSoup
+import re
+
+html = urlopen("http://www.uir.cn")
+bsObj = BeautifulSoup(html, "html.parser")
+for link in bsObj.findAll("a", href=re.compile("[A-Za-z0-9\.]*uir\.cn")):
+        if 'href' in link.attrs:    # 使用tag.attrs获取属性，返回的是字典对象
+            print(link.attrs['href'])
