@@ -24,7 +24,7 @@ url = 'http://apis.baidu.com/apistore/mobilenumber/mobilenumber?phone=' + phonen
 # 使用百度api查询号码归属地
 req = urllib.request.Request(url)
 
-req.add_header("apikey", "4c5c7b17eaa22305f3c9a42379ecf822")
+req.add_header("apikey", "你的apikey")
 
 resp = urllib.request.urlopen(req)
 content = resp.read().decode('unicode-escape')
