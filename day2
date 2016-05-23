@@ -1,1 +1,11 @@
-# 新浪微博影响力排行爬虫
+from selenium import webdriver  # 使用selenium + phantomjs执行爬取网页的js代码
+from bs4 import BeautifulSoup
+import time
+
+driver = webdriver.PhantomJS(executable_path='')  # 根据安装目录设置
+driver.get("http://v6.bang.weibo.com/dzs")
+time.sleep(1)
+pageSource = driver.page_source
+bsObj = BeautifulSoup(pageSource, "html.parser")
+print(bsObj)
+driver.close()
