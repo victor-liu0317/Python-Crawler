@@ -1,4 +1,4 @@
-from selenium import webdriver  # 使用selenium + phantomjs执行爬取网页的js代码
+from selenium import webdriver   # 使用selenium + phantomjs执行爬取网页的js代码
 from bs4 import BeautifulSoup
 import time
 
