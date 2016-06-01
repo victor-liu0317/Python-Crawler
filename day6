@@ -1,0 +1,39 @@
+from selenium import webdriver
+from bs4 import BeautifulSoup
+import time
+import pymysql
+
+
+def foodcrawler():
+    driver = webdriver.PhantomJS(executable_path='')
+    driver.get("http://v6.bang.weibo.com/zmt/meishi")      # 美食排行榜
+    time.sleep(1)
+    pageSource = driver.page_source
+    bsObj = BeautifulSoup(pageSource, "html.parser")
+    # 连接数据库
+    conn = pymysql.connect(user='root', passwd='', host='localhost', db='pythoncrawler', charset="utf8")
+    cur = conn.cursor()
+    # 获取日期
+    crawlerdate = bsObj.find("span", {"data-reactid": ".1.0"}).get_text()
+
+    cur.execute("select * from foodV where date='%s'" % crawlerdate)
+    data = cur.fetchall()
+    if len(data) != 0:  # 如果该日期已经获取
+        print("美食榜已经爬过了")
+    else:
+        # 获取前五名信息
+        count = 0
+        while count < 5:
+            rank = count+1    # 排名
+            icon = bsObj.find("img", {"data-reactid": ".2.0:"+str(count)+".2.0.0.0"})["src"]  # 头像
+            name = bsObj.find("dd", {"data-reactid": ".2.0:"+str(count)+".2.0.1"}).get_text()    # 博主名
+            intro = bsObj.find("dd", {"data-reactid": ".2.0:"+str(count)+".2.0.2"}).get_text()    # 博主简介
+            influence = bsObj.find("span", {"data-reactid": ".2.0:"+str(count)+".2.0.3.1.0"}).get_text()   # 影响力指数
+            cur.execute("insert into foodV VALUES ('%s','%s','%s','%s','%s','%s')"
+                        % (crawlerdate, rank, icon, name, intro, influence))
+            conn.commit()
+            count = count + 1
+        print("美食排行榜更新完毕")
+    cur.close()
+    conn.close()
+    driver.close()
