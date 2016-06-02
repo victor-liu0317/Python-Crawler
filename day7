@@ -1,0 +1,18 @@
+import threading
+import food
+import internet
+import play
+import popular
+
+threads = []    # 线程列表
+t1 = threading.Thread(target=food.foodcrawler)
+threads.append(t1)
+t2 = threading.Thread(target=internet.internetcrawler)
+threads.append(t2)
+t3 = threading.Thread(target=play.playcrawler)
+threads.append(t3)
+t4 = threading.Thread(target=popular.popularcrawler)
+threads.append(t4)
+
+for t in threads:
+    t.start()
