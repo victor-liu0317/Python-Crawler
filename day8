@@ -1,0 +1,75 @@
+from flask import Flask, render_template
+import pymysql
+import json
+app = Flask(__name__)
+
+
+@app.route('/')
+def crawler():
+    return render_template('home.html')
+
+@app.route('/popularv.json')
+def popularv():
+    conn = pymysql.connect(user='root', passwd='', host='localhost', db='pythoncrawler', charset='utf8')
+    cur = conn.cursor()
+    cur.execute("select * from popularv order by date desc limit 5")
+    data = cur.fetchall()
+    d = {}
+    for r in data:
+        l = list(r)
+        l[1] = int(l[1])
+        d[l[1]] = l
+    foodjson = json.dumps(d)
+    cur.close()
+    conn.close()
+    return foodjson
+
+@app.route('/playv.json')
+def playv():
+    conn = pymysql.connect(user='root', passwd='', host='localhost', db='pythoncrawler', charset='utf8')
+    cur = conn.cursor()
+    cur.execute("select * from playv order by date desc limit 5")
+    data = cur.fetchall()
+    d = {}
+    for r in data:
+        l = list(r)
+        l[1] = int(l[1])
+        d[l[1]] = l
+    playjson = json.dumps(d)
+    cur.close()
+    conn.close()
+    return playjson
+
+@app.route('/internetv.json')
+def internetv():
+    conn = pymysql.connect(user='root', passwd='', host='localhost', db='pythoncrawler', charset='utf8')
+    cur = conn.cursor()
+    cur.execute("select * from internetv order by date desc limit 5")
+    data = cur.fetchall()
+    d = {}
+    for r in data:
+        l = list(r)
+        l[1] = int(l[1])
+        d[l[1]] = l
+    internetjson = json.dumps(d)
+    cur.close()
+    conn.close()
+    return internetjson
+
+@app.route('/foodv.json')
+def foodv():
+    conn = pymysql.connect(user='root', passwd='', host='localhost', db='pythoncrawler', charset='utf8')
+    cur = conn.cursor()
+    cur.execute("select * from foodv order by date desc limit 5")
+    data = cur.fetchall()
+    d = {}
+    for r in data:
+        l = list(r)
+        l[1] = int(l[1])
+        d[l[1]] = l
+    foodjson = json.dumps(d)
+    cur.close()
+    conn.close()
+    return foodjson
+if __name__ == '__main__':
+    app.run()
